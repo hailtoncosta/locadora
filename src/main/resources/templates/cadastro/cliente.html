@@ -127,7 +127,8 @@
 				<legend>Pesquisar</legend>
 				<div class="row">
 					 <div class="col s5">
-						 <input id="nomepesquisa" name="nomepesquisa" type="text" placeholder="Pesquisar">
+						 <input id="nomepesquisa" name="nomepesquisa" type="text" placeholder="Pesquisar" 
+						 	    th:value="${nomepesquisa}">
 					 </div>
 						 	
 					 <div class="col s3"> 
@@ -159,7 +160,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each = "clientes : ${clientes}">
+						<tr th:each = "clientes : ${clientes.content}">
 							<td th:text = "${clientes.id}"></td>
 							<td th:text = "${clientes.nome}"></td>
 							<td th:text = "${clientes.cpf}"></td>
@@ -171,6 +172,23 @@
 						</tr>
 					</tbody>
 				</table>
+				
+				<div class="row" style="margin-top: 30px;">
+					<center>
+						
+						<span th:if="${clientes.hasPrevious()}">
+							<a th:href="@{/clientespage(page=${clientes.number-1}, size=${clientes.size}, nomepesquisa=${nomepesquisa})}">Anterior</a>
+						</span>
+						
+						<th:block th:each="i:${#numbers.sequence(0, clientes.totalPages - 1)}">
+							<a th:href="@{/clientespage(page=${i}, size=${clientes.size}, nomepesquisa=${nomepesquisa})}">[[ ${i} + 1 ]]</a>
+						</th:block>
+							
+						<span th:if="${clientes.hasNext()}">
+							<a th:href="@{/clientespage(page=${clientes.number+1}, size=${clientes.size}, nomepesquisa=${nomepesquisa})}">Próximo</a>
+						</span>
+					</center>
+				</div>
 		</fieldset>
 	</form>
 	<script type="text/javascript">

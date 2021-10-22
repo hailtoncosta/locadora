@@ -5,11 +5,16 @@ import java.util.Optional;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.veiculo.locadora.model.Cliente;
@@ -26,8 +31,7 @@ public class ClienteController {
 		
 		clienteRepository.save(cliente);
 		ModelAndView modelAndView = new ModelAndView("cadastro/cliente");
-		Iterable<Cliente> clienteIt = clienteRepository.findAll();//Listar clientes na tabela ao salvar
-		modelAndView.addObject("clientes", clienteIt);
+		modelAndView.addObject("clientes", clienteRepository.findAll(PageRequest.of(0, 4, Sort.by("nome"))));
 		modelAndView.addObject("clienteobj", new Cliente());
 		return modelAndView;
 	}
@@ -35,8 +39,7 @@ public class ClienteController {
 	@RequestMapping(method = RequestMethod.POST, value = "**/listarCliente")
 	public ModelAndView listarCliente() {
 		ModelAndView modelAndView = new ModelAndView("cadastro/cliente");
-		Iterable<Cliente> clienteIt = clienteRepository.findAll();
-		modelAndView.addObject("clientes", clienteIt);
+		modelAndView.addObject("clientes", clienteRepository.findAll(PageRequest.of(0, 4, Sort.by("nome"))));
 		return modelAndView;
 	}
 	
@@ -54,17 +57,35 @@ public class ClienteController {
 		
 		clienteRepository.deleteById(idcliente);
 		ModelAndView modelAndView = new ModelAndView("cadastro/cliente");
-		modelAndView.addObject("clientes", clienteRepository.findAll());
+		modelAndView.addObject("clientes", clienteRepository.findAll(PageRequest.of(0, 4, Sort.by("nome"))));
 		modelAndView.addObject("clienteobj", new Cliente());
 		return modelAndView;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/pesquisarVeiculo")
-	public ModelAndView buscarCliente(@PathParam("nomepesquisa") String nomepesquisa) {
+	public ModelAndView buscarCliente(@PathParam("nomepesquisa") String nomepesquisa, 
+			@PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
+		
+		Page<Cliente> clientes = null;
+		
+		clientes = clienteRepository.findClienteByNamePage(nomepesquisa, pageable);
 		
 		ModelAndView modelAndView = new ModelAndView("cadastro/cliente");
-		modelAndView.addObject("clientes", clienteRepository.findClienteByName(nomepesquisa));
+		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("clienteobj", new Cliente());
+		modelAndView.addObject("nomepesquisa", nomepesquisa);
+		return modelAndView;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/clientespage")
+	public ModelAndView carregaClientesPorPaginacao(@PageableDefault(size = 4) Pageable pageable, ModelAndView modelAndView, 
+			@RequestParam("nomepesquisa") String nomepesquisa) {
+		
+		Page<Cliente> pageCliente = clienteRepository.findClienteByNamePage(nomepesquisa, pageable);
+		modelAndView.addObject("clientes", pageCliente);
+		modelAndView.addObject("clienteobj", new Cliente());
+		modelAndView.addObject("nomepesquisa", nomepesquisa);
+		modelAndView.setViewName("cadastro/cliente");
 		return modelAndView;
 	}
 	

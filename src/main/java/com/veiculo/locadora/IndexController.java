@@ -2,6 +2,7 @@ package com.veiculo.locadora;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,8 +31,7 @@ public class IndexController {
 	@RequestMapping("/cliente")
 	public ModelAndView cliente() {
 		ModelAndView modelAndView = new ModelAndView("cadastro/cliente");
-		Iterable<Cliente> clienteIt = clienteRepository.findAll();//Listar clientes na tabela ao salvar
-		modelAndView.addObject("clientes", clienteIt);
+		modelAndView.addObject("clientes", clienteRepository.findAll(PageRequest.of(0, 4, Sort.by("nome"))));
 		modelAndView.addObject("clienteobj", new Cliente());
 		return modelAndView;
 	}
