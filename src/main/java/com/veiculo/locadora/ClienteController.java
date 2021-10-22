@@ -48,6 +48,7 @@ public class ClienteController {
 		
 		Optional<Cliente> clientes = clienteRepository.findById(idcliente);
 		ModelAndView modelAndView = new ModelAndView("cadastro/cliente");
+		modelAndView.addObject("clientes", clienteRepository.findAll(PageRequest.of(0, 4, Sort.by("nome"))));
 		modelAndView.addObject("clienteobj", clientes.get());
 		return modelAndView;
 	}
