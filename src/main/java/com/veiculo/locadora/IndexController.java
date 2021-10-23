@@ -8,13 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.veiculo.locadora.model.Cliente;
+import com.veiculo.locadora.model.Veiculo;
 import com.veiculo.locadora.repository.ClienteRepository;
+import com.veiculo.locadora.repository.VeiculoRepository;
 
 @Controller
 public class IndexController {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private VeiculoRepository veiculoRepository;
 	
 	@RequestMapping("/")
 	public ModelAndView inicio() {
@@ -25,6 +30,8 @@ public class IndexController {
 	@RequestMapping("/veiculo")
 	public ModelAndView veiculo() {
 		ModelAndView modelAndView = new ModelAndView("cadastro/veiculo");
+		modelAndView.addObject("veiculos", veiculoRepository.findAll(PageRequest.of(0, 4, Sort.by("modelo"))));
+		modelAndView.addObject("veiculoobj", new Veiculo());
 		return modelAndView;
 	}
 	

@@ -7,17 +7,275 @@
 <title>LocadoraAPP</title>
 </head>
 <body>
-	<form style="margin-left: 2px; margin-right: 2px;">
+	<form id="formVeiculo" action="/salvarVeiculo" method="get" style="margin-left: 2px; margin-right: 2px;" th:object="${veiculoobj}">
 		<nav>
 			<a class="brand-logo right">LOCADORA DE VEÍCULOS</a>
 			<ul class="feft hide-on-med-and-down">
 				<li><a class="waves-effect waves-light btn" href="/cliente"><i class="material-icons left">group_add</i>Cadastro de Clientes</a></li>
-				<li><a class="waves-effect waves-light btn" href="/cliente"><i class="material-icons left">time_to_leave</i>Cadastro de Veículos</a></li>
+				<li><a class="waves-effect waves-light btn" href="/veiculo"><i class="material-icons left">time_to_leave</i>Cadastro de Veículos</a></li>
 				<li><a class="waves-effect waves-light btn" href="/aluguel"><i class="material-icons left">recent_actors</i>Cadastro de Aluguel</a></li>
 				<li><a></a></li>
 			</ul>
 		</nav>
+		<fieldset>
+			<legend>Cadastro de veículos</legend>
+			<div class="row">
+				<div class="col s1">
+					<label>Id</label>
+					<input id="veiculo" name="veiculo" type="text" readonly="readonly" th:field="*{id}">
+				</div>
+				
+				<div class="col s3">
+					<label>Modelo</label>
+					<input id="modelo" name="modelo" type="text" required="required" th:field="*{modelo}">
+				</div>
+				
+				<div class="col s2">
+					<label>Marca</label>
+					<input id="marca" name="marca" type="text" required="required" th:field="*{marca}">
+				</div>
+				
+				<div class="col s2">
+					<label>Ano</label>
+					<input id="ano" name="ano" type="text" required="required" th:field="*{ano}">
+				</div>
+				
+				<div class="col s2">
+					<label>Placa</label>
+					<input id="placa" name="placa" type="text" required="required" th:field="*{placa}">
+				</div>
+				
+				<div class="col s1">
+					<label>Alugado? <br/>
+						<input id="alugado" name="alugado" type="radio" value="Sim" th:field="*{alugado}">
+						<span>Sim</span>
+					</label>
+					<br/>
+					<label>
+						<input id="alugado" name="alugado" type="radio" value="Não" th:field="*{alugado}">
+						<span>Não</span>
+					</label>
+				</div>
+				
+				<div class="col s1">
+					<label>Batido? <br/>
+						<input id="batido" name="batido" type="radio" value="Sim" th:field="*{batido}">
+						<span>Sim</span>
+					</label>
+					<br/>
+					<label>
+						<input id="batido" name="batido" type="radio" value="Não" th:field=*{batido}>
+						<span>Não</span>
+					</label>
+				</div>
+			</div>
+			
+			<div class="row">
+				
+				<div class="col s2">
+					<label>Km atual</label>
+					<input id="kmatual" name="kmatual" required="required" th:field="*{kmatual}">
+				</div>
+			
+				<div class="col s2">
+					<label>Valor da diária</label>
+					<input id="valordiaria" name="valordiaria" required="required" th:field="*{valordiaria}">
+				</div>
+				
+				<div class="col s4">
+					<label>Descrição</label>
+					<input id="descricao" name="descricao" required="required" th:field="*{descricao}">
+				</div>
+				
+				<div class="col s4">
+					<label>Tipo do veículo</label>
+					<input id="tipo" name="tipo" required="required" th:field="*{tipo}">
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col s4">
+					<a>
+						<button type="submit" class="waves-effect waves-light btn" onclick="validarCampos()"> 
+						<i class="material-icons left">save</i>
+							Salvar
+						</button>
+					 </a>
+					 
+					 <a href="/veiculo">
+						<button type="button" class="waves-effect waves-light btn" onclick="limparCampos()"> 
+						<i class="material-icons left">clear</i>
+							Limpar
+						</button>
+					 </a>
+				 </div>
+			</div>
+			
+		</fieldset>
 	</form>
+	
+	<form action="pesquisarVeiculo" method="post">
+		<fieldset>
+			<legend>Pesquisar veículos</legend>
+			<div class="row">
+				 <div class="col s5">
+					 <input id="nomepesquisa" name="nomepesquisa" type="text" placeholder="Pesquisar" 
+					 	    th:value="${nomepesquisa}">
+				 </div>
+					 	
+				 <div class="col s2"> 
+					 <a>
+						<button type="submit" class="waves-effect waves-light btn"> 
+						<i class="material-icons left">search</i>
+							Pesquisar
+						</button>
+					 </a>
+				 </div>
+				 
+				 <div class="col s3"> 
+					 <a href="/veiculo">
+						<button type="button" class="waves-effect waves-light btn"> 
+						<i class="material-icons left">dehaze</i>
+							Listar veículos
+						</button>
+					 </a>
+				 </div>
+		 	</div>
+	 	</fieldset>
+	</form>
+
+	<form>
+		<fieldset>
+			<legend>Tabela de veículos</legend>
+				<table class="striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Modelo</th>
+							<th>Marca</th>
+							<th>Ano</th>
+							<th>Placa</th>
+							<th>Alugado?</th>
+							<th>Batido?</th>
+							<th>Km atual</th>
+							<th>Editar</th>
+							<th>Excluir</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each = "veiculos : ${veiculos.content}">
+							<td th:text = "${veiculos.id}"></td>
+							<td th:text = "${veiculos.modelo}"></td>
+							<td th:text = "${veiculos.marca}"></td>
+							<td th:text = "${veiculos.ano}"></td>
+							<td th:text = "${veiculos.placa}"></td>
+							<td th:text = "${veiculos.alugado}"></td>
+							<td th:text = "${veiculos.batido}"></td>
+							<td th:text = "${veiculos.kmatual}"></td>
+							 
+							<td><a th:href="@{/editarVeiculo/{idveiculo}(idveiculo=${veiculos.id})}"><i class="material-icons left">edit</i></a></td>
+							<td><a th:href="@{/deletarVeiculo/{idveiculo}(idveiculo=${veiculos.id})}"><i class="material-icons left">delete</i></a></td>
+						</tr>
+					</tbody>
+				</table>
+				 
+				<div class="row" style="margin-top: 30px;">
+					<center>
+						
+						<span th:if="${veiculos.hasPrevious()}">
+							<a th:href="@{/veiculospage(page=${veiculos.number-1}, size=${veiculos.size}, nomepesquisa=${nomepesquisa})}">Anterior</a>
+						</span>
+						
+						<th:block th:each="i:${#numbers.sequence(0, veiculos.totalPages - 1)}">
+							<a th:href="@{/veiculospage(page=${i}, size=${veiculos.size}, nomepesquisa=${nomepesquisa})}">[[ ${i} + 1 ]]</a>
+						</th:block>
+							
+						<span th:if="${veiculos.hasNext()}">
+							<a th:href="@{/veiculospage(page=${veiculos.number+1}, size=${veiculos.size}, nomepesquisa=${nomepesquisa})}">Próximo</a>
+						</span>
+					</center>
+				</div>
+		</fieldset>
+	</form>
+		
+	<script type="text/javascript">
+		//Função para limpar os campos do formulário
+		function limparCampos() {
+			var elementos = document.getElementById('formVeiculo').elements;
+			for (p = 0; p < elementos.length; p ++) {
+				elementos[p].value = '';
+			}
+		}
+		//Função para validar campos
+		function validarCampos() {
+			var modelo = document.getElementById('modelo');
+			var marca = document.getElementById('marca');
+			var ano = document.getElementById('ano');
+			var placa = document.getElementById('placa');
+			var alugado = document.getElementById('alugado');
+			var batido = document.getElementById('batido');
+			var kmatual = document.getElementById('kmatual');
+			var valordiaria = document.getElementById('valordiaria');
+			var descricao = document.getElementById('descricao');
+			var tipo = document.getElementById('tipo');
+			
+			if (modelo.value === '') {
+				alert('Informe o modelo!');
+				modelo.focus();
+				return false;
+			}
+			
+			if (marca.value === '') {
+				alert('Informe a marca!');
+				marca.focus();
+				return false;
+			}
+			
+			if (ano.value === '') {
+				alert('Informe o ano!');
+				ano.focus();
+				return false;
+			}
+			
+			if (placa.value === '') {
+				alert('Informe a placa');
+				placa.focus();
+				return false;
+			}
+			
+			if (alugado.value === '') {
+				alert('Informe o alugado!');
+				alugado.focus();
+				return false;
+			}
+			
+			if (kmatual.value === '') {
+				alert('Informe a km atual!');
+				kmatual.focus();
+				return false;
+			}
+			
+			if (valordiaria.value === '') {
+				alert('Informe o valor da diária!');
+				valordiaria.focus();
+				return false;
+			}
+			
+			if (descricao.value === '') {
+				alert('Informe o descriçao!');
+				descricao.focus();
+				return false;
+			}
+			
+			if (tipo.value === '') {
+				alert('Informe o tipo!');
+				tipo.focus();
+				return false;
+			}
+		}
+		
+	</script>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </html>

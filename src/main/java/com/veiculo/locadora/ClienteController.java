@@ -63,9 +63,9 @@ public class ClienteController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/pesquisarVeiculo")
+	@RequestMapping(method = RequestMethod.POST, value = "/pesquisarCliente")
 	public ModelAndView buscarCliente(@PathParam("nomepesquisa") String nomepesquisa, 
-			@PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
+			@PageableDefault(size = 4, sort = {"nome"}) Pageable pageable) {
 		
 		Page<Cliente> clientes = null;
 		
