@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.veiculo.locadora.model.Aluguel;
 import com.veiculo.locadora.model.Cliente;
 import com.veiculo.locadora.model.Veiculo;
+import com.veiculo.locadora.repository.AluguelRepository;
 import com.veiculo.locadora.repository.ClienteRepository;
 import com.veiculo.locadora.repository.VeiculoRepository;
 
@@ -20,6 +22,9 @@ public class IndexController {
 	
 	@Autowired
 	private VeiculoRepository veiculoRepository;
+	
+	@Autowired
+	private AluguelRepository aluguelRepository;
 	
 	@RequestMapping("/")
 	public ModelAndView inicio() {
@@ -46,6 +51,8 @@ public class IndexController {
 	@RequestMapping("/aluguel")
 	public ModelAndView aluguel() {
 		ModelAndView modelAndView = new ModelAndView("cadastro/aluguel");
+		modelAndView.addObject("alugueis", aluguelRepository.findAll(PageRequest.of(0, 4, Sort.by("dataAluguel"))));
+		modelAndView.addObject("aluguelobj", new Aluguel());
 		return modelAndView;
 	}
 }

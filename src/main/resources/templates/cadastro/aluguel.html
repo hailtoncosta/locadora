@@ -5,9 +5,90 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta charset="UTF-8">
 <title>LocadoraAPP</title>
+
+<script type="text/javascript">
+
+String.prototype.reverse = function(){
+	  return this.split('').reverse().join(''); 
+	};
+
+	function mascaraAluguel(campo,evento){
+	  var tecla = (!evento) ? window.event.keyCode : evento.which;
+	  var valor  =  campo.value.replace(/[^\d]+/gi,'').reverse();
+	  var resultado  = "";
+	  var mascara = "##.###.###,##".reverse();
+	  for (var x=0, y=0; x<mascara.length && y<valor.length;) {
+	    if (mascara.charAt(x) != '#') {
+	      resultado += mascara.charAt(x);
+	      x++;
+	    } else {
+	      resultado += valor.charAt(y);
+	      y++;
+	      x++;
+	    }
+	  }
+	  campo.value = resultado.reverse();
+	}
+	
+	function mascaraMulta(campo,evento){
+		  var tecla = (!evento) ? window.event.keyCode : evento.which;
+		  var valor  =  campo.value.replace(/[^\d]+/gi,'').reverse();
+		  var resultado  = "";
+		  var mascara = "##.###.###,##".reverse();
+		  for (var x=0, y=0; x<mascara.length && y<valor.length;) {
+		    if (mascara.charAt(x) != '#') {
+		      resultado += mascara.charAt(x);
+		      x++;
+		    } else {
+		      resultado += valor.charAt(y);
+		      y++;
+		      x++;
+		    }
+		  }
+		  campo.value = resultado.reverse();
+		}
+	
+	function mascaraKmEntrada(campo,evento){
+		  var tecla = (!evento) ? window.event.keyCode : evento.which;
+		  var valor  =  campo.value.replace(/[^\d]+/gi,'').reverse();
+		  var resultado  = "";
+		  var mascara = "##.###.###".reverse();
+		  for (var x=0, y=0; x<mascara.length && y<valor.length;) {
+		    if (mascara.charAt(x) != '#') {
+		      resultado += mascara.charAt(x);
+		      x++;
+		    } else {
+		      resultado += valor.charAt(y);
+		      y++;
+		      x++;
+		    }
+		  }
+		  campo.value = resultado.reverse();
+		}
+	
+	function mascaraKmSaida(campo,evento){
+		  var tecla = (!evento) ? window.event.keyCode : evento.which;
+		  var valor  =  campo.value.replace(/[^\d]+/gi,'').reverse();
+		  var resultado  = "";
+		  var mascara = "##.###.###".reverse();
+		  for (var x=0, y=0; x<mascara.length && y<valor.length;) {
+		    if (mascara.charAt(x) != '#') {
+		      resultado += mascara.charAt(x);
+		      x++;
+		    } else {
+		      resultado += valor.charAt(y);
+		      y++;
+		      x++;
+		    }
+		  }
+		  campo.value = resultado.reverse();
+		}
+</script>
+
 </head>
 <body>
-	<form style="margin-left: 2px; margin-right: 2px;">
+	<form action="/salvaraluguel" method="get" id="formAluguel" style="margin-left: 2px; margin-right: 2px;" 
+				th:object = "${aluguelobj}">
 		<nav>
 			<a class="brand-logo right">LOCADORA DE VEÍCULOS</a>
 			<ul class="feft hide-on-med-and-down">
@@ -17,7 +98,211 @@
 				<li><a></a></li>
 			</ul>
 		</nav>
+		
+		<div>
+			<fieldset>
+				<legend>Cadastro de aluguel</legend>
+				
+				<div class="row">
+					<div class="col s2">
+						<label>Id</label>
+						<input id="id" name="id" readonly="readonly" th:field="*{id}">
+					</div>
+					
+					<div class="col s2">
+						<label>Data alguel</label>
+						<input id="dataAluguel" name="dataAluguel" type="date" required="required" th:field="*{dataAluguel}">
+					</div>
+					
+					<div class="col s2">
+						<label>Data prazo</label>
+						<input id="dataPrazo" name="dataPrazo" type="date" required="required" th:field="*{dataPrazo}">
+					</div>
+					
+					<div class="col s2">
+						<label>Valor aluguel</label>
+						<input id="valorAluguel" name="valorAluguel" type="text" required="required" th:field="*{valorAluguel}"
+							onKeyUp="mascaraAluguel(this, event)">
+					</div>
+					
+					<div class="col s2">
+						<label>Valor multa</label>
+						<input id="valorMulta" name="valorMulta" type="text" required="required" th:field="*{valorMulta}"
+							onKeyUp="mascaraMulta(this, event)">
+					</div>
+					
+					<div class="col s1">
+						<label>Km entrada</label>
+						<input id="kmEntrada" name="kmEntrada" required="required" maxlength="7" th:field="*{kmEntrada}"
+							onKeyUp="mascaraKmEntrada(this, event)">
+					</div>
+					
+					<div class="col s1">
+						<label>Km saída</label>
+						<input id="kmSaida" name="kmSaida" required="required" maxlength="7" th:field="*{kmSaida}"
+							onKeyUp="mascaraKmSaida(this, event)">
+					</div>
+				</div>
+				
+				<div class="row">
+				<div class="col s4">
+					<a>
+						<button type="submit" class="waves-effect waves-light btn" onclick="validarCampos()"> 
+						<i class="material-icons left">save</i>
+							Salvar
+						</button>
+					 </a>
+					 
+					 <a href="/aluguel">
+						<button type="button" class="waves-effect waves-light btn" onclick="limparCampos()"> 
+						<i class="material-icons left">clear</i>
+							Limpar
+						</button>
+					 </a>
+				 </div>
+			</div>
+			</fieldset>
+		</div>
 	</form>
+	
+	<form action="pesquisaraluguel" method="post">
+		<fieldset>
+			<legend>Pesquisar aluguel</legend>
+			<div class="row">
+				 <div class="col s5">
+					 <input id="nomepesquisa" name="nomepesquisa" type="text" placeholder="Pesquisar" 
+					 	    th:value="${nomepesquisa}">
+				 </div>
+					 	
+				 <div class="col s2"> 
+					 <a>
+						<button type="submit" class="waves-effect waves-light btn"> 
+						<i class="material-icons left">search</i>
+							Pesquisar
+						</button>
+					 </a>
+				 </div>
+				 
+				 <div class="col s3"> 
+					 <a href="/aluguel">
+						<button type="button" class="waves-effect waves-light btn"> 
+						<i class="material-icons left">dehaze</i>
+							Listar aluguéis
+						</button>
+					 </a>
+				 </div>
+		 	</div>
+		</fieldset>
+	</form>
+	
+	<form>
+		<fieldset>
+			<legend>Tabela de aluguel</legend>
+			<table class="striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Data aluguel</th>
+							<th>Data prazo</th>
+							<th>Valor aluguel</th>
+							<th>Valor multa</th>
+							<th>Km entrada</th>
+							<th>Km saída</th>
+							<th>Editar</th>
+							<th>Excluir</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each = "alugueis : ${alugueis.content}">
+							<td th:text = "${alugueis.id}"></td>
+							<td th:text = "${alugueis.dataAluguel}"></td>
+							<td th:text = "${alugueis.dataPrazo}"></td>
+							<td th:text = "${alugueis.valorAluguel}"></td>
+							<td th:text = "${alugueis.valorMulta}"></td>
+							<td th:text = "${alugueis.kmEntrada}"></td>
+							<td th:text = "${alugueis.kmSaida}"></td>
+							 
+							<td><a th:href="@{/editaraluguel/{idaluguel}(idaluguel=${alugueis.id})}"><i class="material-icons left">edit</i></a></td>
+							<td><a th:href="@{/deletaraluguel/{idaluguel}(idaluguel=${alugueis.id})}"><i class="material-icons left">delete</i></a></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<div class="row" style="margin-top: 30px;">
+					<center>
+						
+						<span th:if="${alugueis.hasPrevious()}">
+							<a th:href="@{/aluguelpage(page=${alugueis.number-1}, size=${alugueis.size}, nomepesquisa=${nomepesquisa})}">Anterior</a>
+						</span>
+						
+						<th:block th:each="i:${#numbers.sequence(0, alugueis.totalPages - 1)}">
+							<a th:href="@{/aluguelpage(page=${i}, size=${alugueis.size}, nomepesquisa=${nomepesquisa})}">[[ ${i} + 1 ]]</a>
+						</th:block>
+							
+						<span th:if="${alugueis.hasNext()}">
+							<a th:href="@{/aluguelpage(page=${alugueis.number+1}, size=${alugueis.size}, nomepesquisa=${nomepesquisa})}">Próximo</a>
+						</span>
+					</center>
+				</div>
+		</fieldset>
+	</form>
+	
 </body>
+	<script type="text/javascript">
+		//Função para limpar os campos do formulário
+		function limparCampos() {
+			var elementos = document.getElementById('formAluguel').elements;
+			for (p = 0; p < elementos.length; p ++) {
+				elementos[p].value = '';
+			}
+		}
+		//Função para validar campos
+		function validarCampos() {
+			var dataAluguel = document.getElementById('dataAluguel');
+			var dataPrazo = document.getElementById('dataPrazo');
+			var valorAluguel = document.getElementById('valorAluguel');
+			var valorMulta = document.getElementById('valorMulta');
+			var kmEntrada = document.getElementById('kmEntrada');
+			var kmSaida = document.getElementById('kmSaida');
+			
+			if (dataAluguel.value === '') {
+				alert('Informe a data do aluguel!');
+				dataAluguel.focus();
+				return false;
+			}
+			
+			if (dataPrazo.value === '') {
+				alert('Informe a data do prazo!');
+				dataPrazo.focus();
+				return false;
+			}
+			
+			if (valorAluguel.value === '') {
+				alert('Informe o valor do alguel!');
+				valorAluguel.focus();
+				return false;
+			}
+			
+			if (valorMulta.value === '') {
+				alert('Informe o valor da multa');
+				valorMulta.focus();
+				return false;
+			}
+			
+			if (kmEntrada.value === '') {
+				alert('Informe a km de entrada!');
+				kmEntrada.focus();
+				return false;
+			}
+			
+			if (kmSaida.value === '') {
+				alert('Informe a km de saída!');
+				kmSaida.focus();
+				return false;
+			}
+		}
+		
+	</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </html>

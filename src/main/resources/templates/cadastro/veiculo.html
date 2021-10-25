@@ -5,6 +5,51 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta charset="UTF-8">
 <title>LocadoraAPP</title>
+
+<script type="text/javascript">
+
+String.prototype.reverse = function(){
+	  return this.split('').reverse().join(''); 
+	};
+
+	function mascaraMoeda(campo,evento){
+	  var tecla = (!evento) ? window.event.keyCode : evento.which;
+	  var valor  =  campo.value.replace(/[^\d]+/gi,'').reverse();
+	  var resultado  = "";
+	  var mascara = "##.###.###,##".reverse();
+	  for (var x=0, y=0; x<mascara.length && y<valor.length;) {
+	    if (mascara.charAt(x) != '#') {
+	      resultado += mascara.charAt(x);
+	      x++;
+	    } else {
+	      resultado += valor.charAt(y);
+	      y++;
+	      x++;
+	    }
+	  }
+	  campo.value = resultado.reverse();
+	}
+	
+	function mascaraKm(campo,evento){
+		  var tecla = (!evento) ? window.event.keyCode : evento.which;
+		  var valor  =  campo.value.replace(/[^\d]+/gi,'').reverse();
+		  var resultado  = "";
+		  var mascara = "##.###.###".reverse();
+		  for (var x=0, y=0; x<mascara.length && y<valor.length;) {
+		    if (mascara.charAt(x) != '#') {
+		      resultado += mascara.charAt(x);
+		      x++;
+		    } else {
+		      resultado += valor.charAt(y);
+		      y++;
+		      x++;
+		    }
+		  }
+		  campo.value = resultado.reverse();
+		}
+	
+</script>
+
 </head>
 <body>
 	<form id="formVeiculo" action="/salvarVeiculo" method="get" style="margin-left: 2px; margin-right: 2px;" th:object="${veiculoobj}">
@@ -74,12 +119,14 @@
 				
 				<div class="col s2">
 					<label>Km atual</label>
-					<input id="kmatual" name="kmatual" required="required" th:field="*{kmatual}">
+					<input id="kmatual" name="kmatual" required="required" th:field="*{kmatual}"
+						onKeyUp="mascaraKm(this, event)">
 				</div>
 			
 				<div class="col s2">
 					<label>Valor da diária</label>
-					<input id="valordiaria" name="valordiaria" required="required" th:field="*{valordiaria}">
+					<input id="valordiaria" name="valordiaria" required="required" th:field="*{valordiaria}"
+						onKeyUp="mascaraMoeda(this, event)">
 				</div>
 				
 				<div class="col s4">
@@ -114,7 +161,7 @@
 		</fieldset>
 	</form>
 	
-	<form action="pesquisarVeiculo" method="post">
+	<form action="/pesquisaraluguel" method="post">
 		<fieldset>
 			<legend>Pesquisar veículos</legend>
 			<div class="row">
@@ -173,7 +220,6 @@
 							<td th:text = "${veiculos.alugado}"></td>
 							<td th:text = "${veiculos.batido}"></td>
 							<td th:text = "${veiculos.kmatual}"></td>
-							 
 							<td><a th:href="@{/editarVeiculo/{idveiculo}(idveiculo=${veiculos.id})}"><i class="material-icons left">edit</i></a></td>
 							<td><a th:href="@{/deletarVeiculo/{idveiculo}(idveiculo=${veiculos.id})}"><i class="material-icons left">delete</i></a></td>
 						</tr>
