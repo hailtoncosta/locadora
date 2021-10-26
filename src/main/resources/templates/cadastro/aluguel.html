@@ -88,7 +88,7 @@ String.prototype.reverse = function(){
 </head>
 <body>
 	<form action="/salvaraluguel" method="get" id="formAluguel" style="margin-left: 2px; margin-right: 2px;" 
-				th:object = "${aluguelobj}">
+				th:object = "${aluguelobj}" onsubmit="return validarCampos()? true : false">
 		<nav>
 			<a class="brand-logo right">LOCADORA DE VEÍCULOS</a>
 			<ul class="feft hide-on-med-and-down">
@@ -112,35 +112,35 @@ String.prototype.reverse = function(){
 					
 					<div class="col s2">
 						<label>Data alguel</label>
-						<input id="dataAluguel" name="dataAluguel" type="date" required="required" th:field="*{dataAluguel}">
+						<input id="dataAluguel" name="dataAluguel" type="date" th:field="*{dataAluguel}">
 					</div>
 					
 					<div class="col s2">
 						<label>Data prazo</label>
-						<input id="dataPrazo" name="dataPrazo" type="date" required="required" th:field="*{dataPrazo}">
+						<input id="dataPrazo" name="dataPrazo" type="date" th:field="*{dataPrazo}">
 					</div>
 					
 					<div class="col s2">
 						<label>Valor aluguel</label>
-						<input id="valorAluguel" name="valorAluguel" type="text" required="required" th:field="*{valorAluguel}"
+						<input id="valorAluguel" name="valorAluguel" type="text" th:field="*{valorAluguel}"
 							onKeyUp="mascaraAluguel(this, event)">
 					</div>
 					
 					<div class="col s2">
 						<label>Valor multa</label>
-						<input id="valorMulta" name="valorMulta" type="text" required="required" th:field="*{valorMulta}"
+						<input id="valorMulta" name="valorMulta" type="text" th:field="*{valorMulta}"
 							onKeyUp="mascaraMulta(this, event)">
 					</div>
 					
 					<div class="col s1">
 						<label>Km entrada</label>
-						<input id="kmEntrada" name="kmEntrada" required="required" maxlength="7" th:field="*{kmEntrada}"
+						<input id="kmEntrada" name="kmEntrada" maxlength="7" th:field="*{kmEntrada}"
 							onKeyUp="mascaraKmEntrada(this, event)">
 					</div>
 					
 					<div class="col s1">
 						<label>Km saída</label>
-						<input id="kmSaida" name="kmSaida" required="required" maxlength="7" th:field="*{kmSaida}"
+						<input id="kmSaida" name="kmSaida" maxlength="7" th:field="*{kmSaida}"
 							onKeyUp="mascaraKmSaida(this, event)">
 					</div>
 				</div>
@@ -148,7 +148,7 @@ String.prototype.reverse = function(){
 				<div class="row">
 				<div class="col s4">
 					<a>
-						<button type="submit" class="waves-effect waves-light btn" onclick="validarCampos()"> 
+						<button type="submit" class="waves-effect waves-light btn"> 
 						<i class="material-icons left">save</i>
 							Salvar
 						</button>
@@ -301,6 +301,8 @@ String.prototype.reverse = function(){
 				kmSaida.focus();
 				return false;
 			}
+			
+			return true;
 		}
 		
 	</script>
