@@ -55,4 +55,10 @@ public class IndexController {
 		modelAndView.addObject("aluguelobj", new Aluguel());
 		return modelAndView;
 	}
+	
+	@RequestMapping("/usuario")
+	public ModelAndView usuario() {
+		ModelAndView modelAndView = new ModelAndView("cadastro/usuario");
+		return modelAndView;
+	}
 }

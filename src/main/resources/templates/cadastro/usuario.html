@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta charset="UTF-8">
+<title>LocadoraAPP</title>
+
+<style type="text/css">
+	
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Helvetica;
+	color: #323232;
+	border: none;
+}
+
+body {
+	background: #9400D3;
+}
+
+textarea:focus, input:focus {
+	outline: none;
+}
+
+#login-container {
+	background: #FFF;
+	width: 400px;
+	height: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px 30px;
+	margin-top: 10vh;
+	border-radius: 10px;
+}
+
+form {
+	margin-top: 30px;
+	margin-bottom: 40px;
+}
+
+#titulo-container {
+	font-size: 20pt;
+}
+
+#div-cadastro {
+	text-align: right;
+	font-size: 10pt;
+}
+
+</style>
+
+</head>
+<body>
+<div class="form-container">
+	<form action="/salvarUsuario" method="get" style="margin-left: 2px; margin-right: 2px; margin-top: 4cm;">
+		
+		<div id="login-container" class="row">
+			<div id="titulo-container" class="col s12" style="text-align: center;">
+			  Cadastro de usuário
+			</div>
+			
+			<div class="col s12">
+				<label>Nome</label>
+				<input id="nome" name="nome" required="required" placeholder="Informe seu nome">
+			</div>
+			
+			<div class="col s12">
+				<label>Login</label>
+				<input id="login" name="login" required="required" placeholder="Informe seu login">
+			</div>
+			
+			<div class="col s12">
+				<label>Senha</label>
+				<input id="senha" name="senha" type="password" required="required" placeholder="Informe sua senha">
+			</div>
+			
+			<div class="col s12">
+				<a href="/">
+					<button type="submit" class="waves-effect waves-light btn" onclick="validarCampos()" style="width: 320px;"> 
+						Salvar
+					</button>
+				</a>
+			</div>
+			
+			<div id="div-cadastro">
+				<a href="/login">
+					<span>Login</span>
+				</a>
+			</div>
+		</div>		
+	</form>
+</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</html>
