@@ -55,7 +55,8 @@ form {
 </head>
 <body>
 <div class="form-container">
-	<form th:action="@{/login}" method="post" style="margin-left: 2px; margin-right: 2px; margin-top: 4cm;">
+	<form th:action="@{/login}" method="post" style="margin-left: 2px; margin-right: 2px; margin-top: 4cm;"
+			onsubmit="return validarCampos()? true : false">
 		
 		<div id="login-container" class="row">
 			<div id="titulo-container" class="col s12" style="text-align: center;">
@@ -64,12 +65,12 @@ form {
 			
 			<div class="col s12">
 				<label>Login</label>
-				<input id="username" name="username" required="required" placeholder="Informe seu login">
+				<input id="username" name="username" placeholder="Informe seu login">
 			</div>
 			
 			<div class="col s12">
 				<label>Senha</label>
-				<input id="password" name="password" type="password" required="required" placeholder="Informe sua senha">
+				<input id="password" name="password" type="password" placeholder="Informe sua senha">
 			</div>
 			
 			<div class="col s12">
@@ -87,5 +88,31 @@ form {
 	</form>
 </div>
 </body>
+
+<script type="text/javascript">
+
+	function validarCampos() {
+		
+		var login = document.getElementById('username');
+		var senha = document.getElementById('password');
+		
+		if (login.value === '') {
+			alert('Informe o login');
+			login.focus();
+			return false;
+		}
+		
+		if (senha.value === '') {
+			alert('Informe a senha');
+			senha.focus();
+			return false;
+		}
+		
+		return true;
+		
+	}
+
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </html>

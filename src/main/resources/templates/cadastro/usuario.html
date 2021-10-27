@@ -55,7 +55,8 @@ form {
 </head>
 <body>
 <div class="form-container">
-	<form action="/salvarUsuario" method="get" style="margin-left: 2px; margin-right: 2px; margin-top: 4cm;">
+	<form action="/salvarUsuario" method="get" style="margin-left: 2px; margin-right: 2px; margin-top: 4cm;"
+		onsubmit="return validarCampos()? true : false">
 		
 		<div id="login-container" class="row">
 			<div id="titulo-container" class="col s12" style="text-align: center;">
@@ -64,22 +65,22 @@ form {
 			
 			<div class="col s12">
 				<label>Nome</label>
-				<input id="nome" name="nome" required="required" placeholder="Informe seu nome">
+				<input id="nome" name="nome" placeholder="Informe seu nome">
 			</div>
 			
 			<div class="col s12">
 				<label>Login</label>
-				<input id="login" name="login" required="required" placeholder="Informe seu login">
+				<input id="login" name="login" placeholder="Informe seu login">
 			</div>
 			
 			<div class="col s12">
 				<label>Senha</label>
-				<input id="senha" name="senha" type="password" required="required" placeholder="Informe sua senha">
+				<input id="senha" name="senha" type="password" placeholder="Informe sua senha">
 			</div>
 			
 			<div class="col s12">
-				<a href="/">
-					<button type="submit" class="waves-effect waves-light btn" onclick="validarCampos()" style="width: 320px;"> 
+				<a href="#">
+					<button type="submit" class="waves-effect waves-light btn" style="width: 320px;"> 
 						Salvar
 					</button>
 				</a>
@@ -93,6 +94,39 @@ form {
 		</div>		
 	</form>
 </div>
+
+<script type="text/javascript">
+	
+	function validarCampos() {
+		
+		var nome = document.getElementById('nome');
+		var login = document.getElementById('login');
+		var senha = document.getElementById('senha');
+		
+		if (nome.value === '') {
+			alert('Informe o nome');
+			nome.focus();
+			return false;
+		}
+		
+		if (login.value === '') {
+			alert('Informe o login');
+			login.focus();
+			return false;
+		}
+		
+		if (senha.value === '') {
+			alert('Informe a senha');
+			senha.focus();
+			return false;
+		}
+		
+		return true;
+		
+	}
+	
+</script>
+
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </html>
